@@ -45,20 +45,20 @@ jobs:
           echo "TOTAL ${{ toJSON(matrix.package) }}"
           echo "PACKAGES ${{ toJSON(matrix.package.packages) }}"
           echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0]) }}"
-          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0].filenames) }}"
-          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[1].filenames) }}"
+          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0][0].filenames) }}"
+          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0][1].filenames) }}"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0].filenames, 'bo_win')
-        run: echo "PRINTING WIN ${{matrix.package.packages[0]}}"
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        run: echo "PRINTING WIN ${{matrix.package.packages[0][0]}}"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[1].filenames, 'bo_win')
-        run: echo "PRINTING WIN ${{matrix.package.packages[1]}}"
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        run: echo "PRINTING WIN ${{matrix.package.packages[0][1]}}"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0].filenames, 'bo_nix')
-        run: echo "PRINTING LINUX ${{matrix.package.packages[0]}}"
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        run: echo "PRINTING LINUX ${{matrix.package.packages[0][0]}}"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[1].filenames, 'bo_nix')
-        run: echo "PRINTING LINUX ${{matrix.package.packages[1]}}"
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        run: echo "PRINTING LINUX ${{matrix.package.packages[0][1]}}"
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
