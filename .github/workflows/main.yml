@@ -44,9 +44,8 @@ jobs:
 
       - name: Compute build order
         run: | 
-          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="game*" -pr=windows --order-by=recipe --format=json > game_windows.json
+          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="game*" -pr=windows --order-by=recipe --format=json > build_order.json
 
-          conan graph build-order-merge --file=game_windows.json --reduce --format=json > build_order.json
       - name: get properties
         id: json_properties
         uses: ActionsTools/read-json-action@main
