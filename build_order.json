@@ -1,0 +1,114 @@
+{
+    "order_by": "recipe",
+    "reduced": false,
+    "order": [
+        [
+            {
+                "ref": "pkg1/0.1#db6569e42e3e9916209e2ef64d6a7b52",
+                "depends": [],
+                "packages": [
+                    [
+                        {
+                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "bo_win"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=pkg1/0.1 --build=pkg1/0.1",
+                            "info": {
+                                "settings": {
+                                    "os": "Windows"
+                                }
+                            }
+                        },
+                        {
+                            "package_id": "9a4eb3c8701508aa9458b1a73d0633783ecc2270",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "bo_nix"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=pkg1/0.1 --build=pkg1/0.1",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux"
+                                }
+                            }
+                        }
+                    ]
+                ]
+            },
+            {
+                "ref": "pkg2/0.1#db6569e42e3e9916209e2ef64d6a7b52",
+                "depends": [],
+                "packages": [
+                    [
+                        {
+                            "package_id": "9a4eb3c8701508aa9458b1a73d0633783ecc2270",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "bo_nix"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=pkg2/0.1 --build=pkg2/0.1",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux"
+                                }
+                            }
+                        }
+                    ]
+                ]
+            }
+        ],
+        [
+            {
+                "ref": "pkg3/0.1#db6569e42e3e9916209e2ef64d6a7b52",
+                "depends": [],
+                "packages": [
+                    [
+                        {
+                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "bo_win"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=pkg3/0.1 --build=pkg3/0.1",
+                            "info": {
+                                "settings": {
+                                    "os": "Windows"
+                                }
+                            }
+                        }
+                    ]
+                ]
+            }
+        ]
+    ],
+    "profiles": {
+        "bo_win": {
+            "args": "-pr:h=\"windows\""
+        },
+        "bo_nix": {
+            "args": "-pr:h=\"linux\""
+        }
+    }
+}

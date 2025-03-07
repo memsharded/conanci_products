@@ -11,9 +11,17 @@ jobs:
     outputs:
       build_order: ${{ steps.create.outputs.build_order }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: get properties
+        id: json_properties
+        uses: ActionsTools/read-json-action@main
+        with:
+          file_path: "build_order.json" 
       - id: create
         name: Create build-order
-        run: echo "build_order=[[[1, [\"windows\", \"linux\"]], [2, [\"windows\"]], [3, [\"linux\"]]], [4, 5], [6, 7, 8]]" >> "$GITHUB_OUTPUT" 
+        run: echo ${{steps.json_properties.outputs.order}} >> "$GITHUB_OUTPUT" 
+        # run: echo "build_order=[[[1, [\"windows\", \"linux\"]], [2, [\"windows\"]], [3, [\"linux\"]]], [4, 5], [6, 7, 8]]" >> "$GITHUB_OUTPUT" 
 
   level0:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
@@ -26,10 +34,10 @@ jobs:
     steps:
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(toJSON(matrix.package[1]), 'windows')
-        run: echo "PRINTING WIN matrix.package[0]"
+        run: echo "PRINTING WIN ${{matrix.package[0]}}"
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(toJSON(matrix.package[1]), 'linux')
-        run: echo "PRINTING LINUX matrix.package[0]"
+        run: echo "PRINTING LINUX ${{matrix.package[0]}}"
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
