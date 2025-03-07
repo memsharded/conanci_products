@@ -67,6 +67,12 @@ jobs:
       - name: Print
         run: |
           echo "${{needs.compute_build_order.outputs.build_order}}"
+      - name: ReadJSON
+        run: |
+          echo "${{fromJSON(needs.compute_build_order.outputs.build_order)}}"
+      - name: RoundTrip
+        run: |
+          echo "${{toJSON(fromJSON(needs.compute_build_order.outputs.build_order))}}"
   
   level0:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
