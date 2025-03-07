@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Printing
-        run: echo "PRINTING ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0]}}"
+        run: echo "PRINTING ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0][0]}}"
 
   level0:
     needs: [compute_build_order]
