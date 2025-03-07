@@ -43,11 +43,17 @@ jobs:
       - name: Printing
         run: echo "${{ toJSON(matrix.package) }}"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(toJSON(matrix.package[1]), 'windows')
-        run: echo "PRINTING WIN ${{matrix.package[0]}}"
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0].filenames, 'bo_win')
+        run: echo "PRINTING WIN ${{matrix.package.packages[0]}}"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[1].filenames, 'bo_win')
+        run: echo "PRINTING WIN ${{matrix.package.packages[1]}}"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(toJSON(matrix.package[1]), 'linux')
-        run: echo "PRINTING LINUX ${{matrix.package[0]}}"
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0].filenames, 'bo_nix')
+        run: echo "PRINTING LINUX ${{matrix.package.packages[0]}}"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[1].filenames, 'bo_nix')
+        run: echo "PRINTING LINUX ${{matrix.package.packages[1]}}"
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
