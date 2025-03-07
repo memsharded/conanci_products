@@ -14,6 +14,7 @@ on:
     inputs:
       matrix:
         required: true
+        type: Object
 
 jobs:
   level:

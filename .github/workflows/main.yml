@@ -52,6 +52,8 @@ jobs:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[0] }}
         config: [windows-2022, ubuntu-24.04]
     uses: ./.github/workflows/builder.yml
+    with:
+      matrix: ${{ matrix }}
     # runs-on: ${{ matrix.config }}
     # steps:
     #   - name: Print
