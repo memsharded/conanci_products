@@ -84,7 +84,7 @@ jobs:
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
       - name: Upload
-        run: conan upload * -r=products --confirm
+        run: conan upload "*" -r=products --confirm
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[1]
@@ -117,7 +117,7 @@ jobs:
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
       - name: Upload
-        run: conan upload * -r=products --confirm
+        run: conan upload "*" -r=products --confirm
 
   level2:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[2]
@@ -150,7 +150,7 @@ jobs:
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
       - name: Upload
-        run: conan upload * -r=products --confirm
+        run: conan upload "*" -r=products --confirm
 
   level3:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[3]
@@ -183,5 +183,5 @@ jobs:
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
       - name: Upload
-        run: conan upload * -r=products --confirm
+        run: conan upload "*" -r=products --confirm
  
