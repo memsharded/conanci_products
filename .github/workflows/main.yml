@@ -9,7 +9,7 @@ jobs:
     name: Compute build order
     runs-on: ubuntu-24.04
     outputs:
-      build_order: ${{ steps.create.outputs.build_order.order }}
+      build_order: ${{ steps.create.outputs.build_order }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,17 +63,17 @@ jobs:
           echo "${{fromJSON(needs.compute_build_order.outputs.build_order)}}"
       - name: Element 0
         run: |
-          echo "${{toJSON(fromJSON(needs.compute_build_order.outputs.build_order)[0])}}"
+          echo "${{toJSON(fromJSON(needs.compute_build_order.outputs.build_order.order)[0])}}"
       - name: RoundTrip
         run: |
-          echo "${{toJSON(fromJSON(needs.compute_build_order.outputs.build_order))}}"
+          echo "${{toJSON(fromJSON(needs.compute_build_order.outputs.build_order.order))}}"
   
   level0:
-    if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
+    if: fromJSON(needs.compute_build_order.outputs.build_order.order)[0]
     needs: [compute_build_order]
     strategy:
       matrix:
-        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0] }}
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order.order)[0] }}
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
