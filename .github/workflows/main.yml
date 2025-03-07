@@ -60,7 +60,9 @@ jobs:
         name: Create build-order
         env:
           JSON: ${{toJSON(steps.json_properties.outputs.order)}}
-        run: echo "build_order=$JSON" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "JSON=$JSON"
+          echo "build_order=$JSON" >> "$GITHUB_OUTPUT"
   
   basic_print:
     needs: [compute_build_order]
