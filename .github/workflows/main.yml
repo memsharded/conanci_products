@@ -5,52 +5,14 @@ on:
       - main
 
 jobs:
-  # compute_build_order:
-  #   name: Compute build order
-  #   runs-on: ubuntu-24.04
-  #   outputs:
-  #     build_order: ${{ steps.create.outputs.build_order }}
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: get properties
-  #       id: json_properties
-  #       uses: ActionsTools/read-json-action@main
-  #       with:
-  #         file_path: "build_order.json" 
-  #     - id: create
-  #       name: Create build-order
-  #       run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT" 
-
   compute_build_order:
     name: Compute build order
     runs-on: ubuntu-24.04
     outputs:
       build_order: ${{ steps.create.outputs.build_order }}
     steps:
-      - name: Configure
-        run: |
-          apt-get update && apt-get install -y python3 python3-pip
-          python3 -m pip install conan
-          conan config install https://github.com/memsharded/conanci_conf.git
-          conan profile detect
-          conan remote enable products
-          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
-          conan remote enable develop
-          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
-      - name: Create lockfile
-        run: |
-          conan lock create --requires=game/1.0 -pr=windows --lockfile-out=conan.lock
-          conan lock create --requires=game/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
-          conan lock create --requires=mapviewer/1.0 -pr=windows --lockfile=conan.lock --lockfile-out=conan.lock
-          conan lock create --requires=mapviewer/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
-      - name: Compute build order
-        run: | 
-          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > game_windows.json
-          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > game_linux.json
-          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
-          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
-          conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: get properties
         id: json_properties
         uses: ActionsTools/read-json-action@main
@@ -58,7 +20,40 @@ jobs:
           file_path: "build_order.json" 
       - id: create
         name: Create build-order
-        run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT"
+        run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT" 
+
+  #   steps:
+  #     - name: Configure
+  #       run: |
+  #         apt-get update && apt-get install -y python3 python3-pip
+  #         python3 -m pip install conan
+  #         conan config install https://github.com/memsharded/conanci_conf.git
+  #         conan profile detect
+  #         conan remote enable products
+  #         conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+  #         conan remote enable develop
+  #         conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+  #     - name: Create lockfile
+  #       run: |
+  #         conan lock create --requires=game/1.0 -pr=windows --lockfile-out=conan.lock
+  #         conan lock create --requires=game/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
+  #         conan lock create --requires=mapviewer/1.0 -pr=windows --lockfile=conan.lock --lockfile-out=conan.lock
+  #         conan lock create --requires=mapviewer/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
+  #     - name: Compute build order
+  #       run: | 
+  #         conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > game_windows.json
+  #         conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > game_linux.json
+  #         conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
+  #         conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
+  #         conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
+  #     - name: get properties
+  #       id: json_properties
+  #       uses: ActionsTools/read-json-action@main
+  #       with:
+  #         file_path: "build_order.json" 
+  #     - id: create
+  #       name: Create build-order
+  #       run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT"
   
   basic_print:
     needs: [compute_build_order]
