@@ -22,6 +22,14 @@ jobs:
       - name: Printing
         run: echo "PRINTING ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0]}}"
 
+  nested_wf:
+    needs: [compute_build_order]
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0] }}
+    uses: ./.github/workflows/execute.yml
+
+
   level0:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
     needs: [compute_build_order]

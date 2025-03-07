@@ -4,15 +4,11 @@ on:
   workflow_call:
 
 jobs:
-  linux_build:
+  execute:
     runs-on: ubuntu-24.04
-    name: Build Linux package
+    name: Executing configs
+    matrix:
+      config: [windows, Linux]
     steps:
-      - name: Download conan.lock
-        uses: actions/download-artifact@v4
-        with:
-          name: conan.lock
-      - name: build package
-        run: |
-          conan create . --build="missing:mathlib/*" -pr=linux --lockfile=conan.lock --format=json > graph.json
-
+      - name: Printing
+        run: echo "PRINTING ${{ matrix.config }}"
