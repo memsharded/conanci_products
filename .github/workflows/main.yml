@@ -5,14 +5,48 @@ on:
       - main
 
 jobs:
+  # compute_build_order:
+  #   name: Compute build order
+  #   runs-on: ubuntu-24.04
+  #   outputs:
+  #     build_order: ${{ steps.create.outputs.build_order }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: get properties
+  #       id: json_properties
+  #       uses: ActionsTools/read-json-action@main
+  #       with:
+  #         file_path: "build_order.json" 
+  #     - id: create
+  #       name: Create build-order
+  #       run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT" 
+
   compute_build_order:
     name: Compute build order
     runs-on: ubuntu-24.04
-    outputs:
-      build_order: ${{ steps.create.outputs.build_order }}
     steps:
+      - name: Configure
+        run: |
+          apt-get update && apt-get install -y python3 python3-pip
+          python3 -m pip install conan
+          conan config install https://github.com/memsharded/conanci_conf.git
+          conan profile detect
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Create lockfile
+        run: |
+          conan lock create --requires=game/1.0 -pr=windows --lockfile-out=conan.lock
+          conan lock create --requires=game/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
+          conan lock create --requires=mapviewer/1.0 -pr=windows --lockfile=conan.lock --lockfile-out=conan.lock
+          conan lock create --requires=mapviewer/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
+      - name: Compute build order
+        run: | 
+          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > game_windows.json
+          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > game_linux.json
+          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build=missing -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
+          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build=missing -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
+          conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
       - name: get properties
         id: json_properties
         uses: ActionsTools/read-json-action@main
@@ -20,9 +54,8 @@ jobs:
           file_path: "build_order.json" 
       - id: create
         name: Create build-order
-        run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT" 
-        # run: echo "build_order=[[[1, [\"windows\", \"linux\"]], [2, [\"windows\"]], [3, [\"linux\"]]], [4, 5], [6, 7, 8]]" >> "$GITHUB_OUTPUT" 
-
+        run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT"
+  
   basic_print:
     needs: [compute_build_order]
     runs-on: ubuntu-24.04
@@ -41,16 +74,16 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level1:
@@ -63,10 +96,10 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
@@ -85,16 +118,16 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level3:
@@ -107,15 +140,15 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
         run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
  
