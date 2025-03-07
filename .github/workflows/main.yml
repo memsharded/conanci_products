@@ -38,8 +38,6 @@ jobs:
           conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
           conan remote enable develop
           conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Create lockfile
         run: |
           conan lock create --requires=game/1.0 -pr=windows --lockfile-out=conan.lock
@@ -52,7 +50,6 @@ jobs:
           conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > game_linux.json
           conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
           conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
-          conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json
           conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
       - name: get properties
         id: json_properties
