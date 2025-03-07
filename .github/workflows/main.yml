@@ -23,6 +23,14 @@ jobs:
         run: echo "build_order=${{steps.json_properties.outputs.order}}" >> "$GITHUB_OUTPUT" 
         # run: echo "build_order=[[[1, [\"windows\", \"linux\"]], [2, [\"windows\"]], [3, [\"linux\"]]], [4, 5], [6, 7, 8]]" >> "$GITHUB_OUTPUT" 
 
+  basic_print:
+    needs: [compute_build_order]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Print
+        run: |
+          echo ${{toJSON(needs.compute_build_order.outputs.build_order)}}
+  
   level0:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
     needs: [compute_build_order]
