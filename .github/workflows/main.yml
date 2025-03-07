@@ -54,7 +54,7 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
-        run: echo ${{ toJSON(matrix.package) }}
+        run: echo "${{ toJSON(matrix.package) }}"
       - name: Configure
         run: |
           python3 -m pip install conan
@@ -92,7 +92,7 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
-        run: echo ${{ toJSON(matrix.package) }}
+        run: echo "${{ toJSON(matrix.package) }}"
       - name: Configure
         run: |
           python3 -m pip install conan
@@ -130,7 +130,7 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
-        run: echo ${{ toJSON(matrix.package) }}
+        run: echo "${{ toJSON(matrix.package) }}"
       - name: Configure
         run: |
           python3 -m pip install conan
@@ -168,7 +168,7 @@ jobs:
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
-        run: echo ${{ toJSON(matrix.package) }}
+        run: echo "${{ toJSON(matrix.package) }}"
       - name: Configure
         run: |
           python3 -m pip install conan
