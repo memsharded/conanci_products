@@ -40,25 +40,18 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing
-        run: |
-          echo "TOTAL ${{ toJSON(matrix.package) }}"
-          echo "PACKAGES ${{ toJSON(matrix.package.packages) }}"
-          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0]) }}"
-          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0][0].filenames) }}"
-          echo "PACKAGE 0 ${{ toJSON(matrix.package.packages[0][1].filenames) }}"
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
-        run: echo "PRINTING WIN ${{matrix.package.packages[0][0]}}"
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
-        run: echo "PRINTING WIN ${{matrix.package.packages[0][1]}}"
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
-        run: echo "PRINTING LINUX ${{matrix.package.packages[0][0]}}"
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
-        run: echo "PRINTING LINUX ${{matrix.package.packages[0][1]}}"
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
@@ -66,10 +59,21 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[1] }}
-    runs-on: ubuntu-24.04
+        config: [windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing
-        run: echo "PRINTING ${{matrix.package}}"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level2:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[2]
@@ -77,10 +81,21 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[2] }}
-    runs-on: ubuntu-24.04
+        config: [windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing
-        run: echo "PRINTING ${{matrix.package}}"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level3:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[3]
@@ -88,8 +103,19 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[3] }}
-    runs-on: ubuntu-24.04
+        config: [windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing
-        run: echo "PRINTING ${{matrix.package}}"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'bo_win')
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
+      - name: Printing Windows
+        if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'bo_win')
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
+        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
+      - name: Printing linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
+        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
  
