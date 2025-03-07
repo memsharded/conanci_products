@@ -62,10 +62,16 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
-      - name: Configure
+      - name: Install Windows
+        if: matrix.config == 'windows-2022'
+        run: python3 -m pip install conan
+      - name: Install Linux
+        if: matrix.config == 'ubuntu-24.04'
         run: |
           apt-get update && apt-get install -y python3 python3-pip
           python3 -m pip install conan
+      - name: Configure
+        run: |
           conan config install https://github.com/memsharded/conanci_conf.git
           conan profile detect
           conan remote enable products
