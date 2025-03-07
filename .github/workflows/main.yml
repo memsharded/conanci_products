@@ -62,34 +62,29 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
-      - name: Install Windows
-        if: matrix.config == 'windows-2022'
-        run: python3 -m pip install conan
-      - name: Install Linux
-        if: matrix.config == 'ubuntu-24.04'
-        run: |
-          apt-get update && apt-get install -y python3 python3-pip
-          python3 -m pip install conan
       - name: Configure
         run: |
+          python3 -m pip install conan
           conan config install https://github.com/memsharded/conanci_conf.git
           conan profile detect
           conan remote enable products
           conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
           conan remote enable develop
           conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
-      - name: Printing Windows
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
         run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows
-      - name: Printing Windows
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows
-      - name: Printing linux
+      - name: Building linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
         run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux
-      - name: Printing linux
+      - name: Building linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
+      - name: Upload
+        run: conan upload * -r=products --confirm
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[1]
@@ -100,18 +95,29 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing Windows
+      - name: Configure
+        run: |
+          python3 -m pip install conan
+          conan config install https://github.com/memsharded/conanci_conf.git
+          conan profile detect
+          conan remote enable products
+          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+          conan remote enable develop
+          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
-      - name: Printing Windows
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
-      - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'bo_nix')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
-      - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'bo_nix')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows
+      - name: Building linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux
+      - name: Building linux
+        if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
+      - name: Upload
+        run: conan upload * -r=products --confirm
 
   level2:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[2]
@@ -122,18 +128,29 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing Windows
+      - name: Configure
+        run: |
+          python3 -m pip install conan
+          conan config install https://github.com/memsharded/conanci_conf.git
+          conan profile detect
+          conan remote enable products
+          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+          conan remote enable develop
+          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
-      - name: Printing Windows
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
-      - name: Printing linux
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows
+      - name: Building linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
-      - name: Printing linux
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux
+      - name: Building linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
+      - name: Upload
+        run: conan upload * -r=products --confirm
 
   level3:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[3]
@@ -144,16 +161,27 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
-      - name: Printing Windows
+      - name: Configure
+        run: |
+          python3 -m pip install conan
+          conan config install https://github.com/memsharded/conanci_conf.git
+          conan profile detect
+          conan remote enable products
+          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+          conan remote enable develop
+          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
-      - name: Printing Windows
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows
+      - name: Building Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
-      - name: Printing linux
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows
+      - name: Building linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
-      - name: Printing linux
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux
+      - name: Building linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
+      - name: Upload
+        run: conan upload * -r=products --confirm
  
