@@ -17,7 +17,8 @@ on:
         type: string
 
 jobs:
-  level:
+  builder:
+    name: ${{ fromJSON(inputs.matrix).config }}
     runs-on: ${{ fromJSON(inputs.matrix).config }}
     steps:
       - name: Print
@@ -32,17 +33,17 @@ jobs:
           conan remote enable develop
           conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
       - name: Building Windows
-        if: runner.os == 'Windows' && matrix.package.packages[0][0].binary == 'Build' && contains(toJSON(matrix.package.packages[0][0].filenames), 'windows') 
-        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows --format=json > graph.json
+        if: runner.os == 'Windows' && fromJSON(inputs.matrix).package.packages[0][0].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'windows') 
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} -pr=windows --format=json > graph.json
       - name: Building Windows
-        if: runner.os == 'Windows' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'windows')
-        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows --format=json > graph.json
+        if: runner.os == 'Windows' && fromJSON(inputs.matrix).package.packages[0][1].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'windows')
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} -pr=windows --format=json > graph.json
       - name: Building linux
-        if: runner.os == 'Linux' && matrix.package.packages[0][0].binary == 'Build' && contains(toJSON(matrix.package.packages[0][0].filenames), 'linux')
-        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux --format=json > graph.json
+        if: runner.os == 'Linux' && fromJSON(inputs.matrix).package.packages[0][0].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'linux')
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} -pr=linux --format=json > graph.json
       - name: Building linux
-        if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
-        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
+        if: runner.os == 'Linux' && fromJSON(inputs.matrix).package.packages[0][1].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'linux')
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
