@@ -93,7 +93,12 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[1] }}
-        config: [windows-2022, ubuntu-24.04]
+        config:
+          - {runner: windows-2022, shell: cmd}
+          - {runer: ubuntu-24.04, shell: bash}
+    defaults:
+      run:
+        shell: ${{ matrix.config.shell }}
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
@@ -120,7 +125,6 @@ jobs:
         if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
       - name: Upload
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash'}}
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
@@ -132,7 +136,12 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[2] }}
-        config: [windows-2022, ubuntu-24.04]
+        config:
+          - {runner: windows-2022, shell: cmd}
+          - {runer: ubuntu-24.04, shell: bash}
+    defaults:
+      run:
+        shell: ${{ matrix.config.shell }}
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
@@ -159,7 +168,6 @@ jobs:
         if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
       - name: Upload
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash'}}
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
@@ -171,7 +179,12 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[3] }}
-        config: [windows-2022, ubuntu-24.04]
+        config:
+          - {runner: windows-2022, shell: cmd}
+          - {runer: ubuntu-24.04, shell: bash}
+    defaults:
+      run:
+        shell: ${{ matrix.config.shell }}
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
@@ -198,7 +211,6 @@ jobs:
         if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
       - name: Upload
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash'}}
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
