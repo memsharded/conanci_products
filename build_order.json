@@ -1,72 +1,68 @@
 {
     "order_by": "recipe",
-    "reduced": false,
+    "reduced": true,
     "order": [
         [
             {
-                "ref": "pkg1/0.1#db6569e42e3e9916209e2ef64d6a7b52",
+                "ref": "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea",
                 "depends": [],
                 "packages": [
                     [
                         {
-                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "package_id": "4d8ab52ebb49f51e63d5193ed580b5a7672e23d5",
                             "prev": null,
                             "context": "host",
                             "binary": "Build",
                             "options": [],
                             "filenames": [
-                                "bo_win"
+                                "game_windows",
+                                "mapviewer_windows"
                             ],
                             "depends": [],
                             "overrides": {},
-                            "build_args": "--requires=pkg1/0.1 --build=pkg1/0.1",
+                            "build_args": "--requires=mathlib/1.0 --build=mathlib/1.0",
                             "info": {
                                 "settings": {
-                                    "os": "Windows"
+                                    "os": "Windows",
+                                    "arch": "x86_64",
+                                    "compiler": "msvc",
+                                    "compiler.cppstd": "14",
+                                    "compiler.runtime": "dynamic",
+                                    "compiler.runtime_type": "Release",
+                                    "compiler.version": "194",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "shared": "False"
                                 }
                             }
                         },
                         {
-                            "package_id": "9a4eb3c8701508aa9458b1a73d0633783ecc2270",
+                            "package_id": "838c313f1b7acdfd23b222f0156e7c264dcc2515",
                             "prev": null,
                             "context": "host",
                             "binary": "Build",
                             "options": [],
                             "filenames": [
-                                "bo_nix"
+                                "game_linux",
+                                "mapviewer_linux"
                             ],
                             "depends": [],
                             "overrides": {},
-                            "build_args": "--requires=pkg1/0.1 --build=pkg1/0.1",
+                            "build_args": "--requires=mathlib/1.0 --build=mathlib/1.0",
                             "info": {
                                 "settings": {
-                                    "os": "Linux"
-                                }
-                            }
-                        }
-                    ]
-                ]
-            },
-            {
-                "ref": "pkg2/0.1#db6569e42e3e9916209e2ef64d6a7b52",
-                "depends": [],
-                "packages": [
-                    [
-                        {
-                            "package_id": "9a4eb3c8701508aa9458b1a73d0633783ecc2270",
-                            "prev": null,
-                            "context": "host",
-                            "binary": "Build",
-                            "options": [],
-                            "filenames": [
-                                "bo_nix"
-                            ],
-                            "depends": [],
-                            "overrides": {},
-                            "build_args": "--requires=pkg2/0.1 --build=pkg2/0.1",
-                            "info": {
-                                "settings": {
-                                    "os": "Linux"
+                                    "os": "Linux",
+                                    "arch": "x86_64",
+                                    "compiler": "gcc",
+                                    "compiler.cppstd": "gnu17",
+                                    "compiler.libcxx": "libstdc++11",
+                                    "compiler.version": "13",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "fPIC": "True",
+                                    "shared": "False"
                                 }
                             }
                         }
@@ -76,26 +72,146 @@
         ],
         [
             {
-                "ref": "pkg3/0.1#db6569e42e3e9916209e2ef64d6a7b52",
-                "depends": [],
+                "ref": "ai/1.0#c48360f25f5d0edde10239b8818f5f06",
+                "depends": [
+                    "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea"
+                ],
                 "packages": [
                     [
                         {
-                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "package_id": "8b108997a4947ec6a0487a0b6bcbc0d1072e95f3",
                             "prev": null,
                             "context": "host",
                             "binary": "Build",
                             "options": [],
                             "filenames": [
-                                "bo_win"
+                                "game_windows"
                             ],
                             "depends": [],
                             "overrides": {},
-                            "build_args": "--requires=pkg3/0.1 --build=pkg3/0.1",
+                            "build_args": "--requires=ai/1.0 --build=ai/1.0",
                             "info": {
                                 "settings": {
-                                    "os": "Windows"
-                                }
+                                    "os": "Windows",
+                                    "arch": "x86_64",
+                                    "compiler": "msvc",
+                                    "compiler.cppstd": "14",
+                                    "compiler.runtime": "dynamic",
+                                    "compiler.runtime_type": "Release",
+                                    "compiler.version": "194",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "shared": "False"
+                                },
+                                "requires": [
+                                    "mathlib/1.0.Z"
+                                ]
+                            }
+                        },
+                        {
+                            "package_id": "f7eb850096d2a417fcff2c51ba6e5a518ed63051",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "game_linux"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=ai/1.0 --build=ai/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux",
+                                    "arch": "x86_64",
+                                    "compiler": "gcc",
+                                    "compiler.cppstd": "gnu17",
+                                    "compiler.libcxx": "libstdc++11",
+                                    "compiler.version": "13",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "fPIC": "True",
+                                    "shared": "False"
+                                },
+                                "requires": [
+                                    "mathlib/1.0.Z"
+                                ]
+                            }
+                        }
+                    ]
+                ]
+            },
+            {
+                "ref": "graphics/1.0#24b395ba17da96288766cc83accc98f5",
+                "depends": [
+                    "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea"
+                ],
+                "packages": [
+                    [
+                        {
+                            "package_id": "8b108997a4947ec6a0487a0b6bcbc0d1072e95f3",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "game_windows",
+                                "mapviewer_windows"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=graphics/1.0 --build=graphics/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Windows",
+                                    "arch": "x86_64",
+                                    "compiler": "msvc",
+                                    "compiler.cppstd": "14",
+                                    "compiler.runtime": "dynamic",
+                                    "compiler.runtime_type": "Release",
+                                    "compiler.version": "194",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "shared": "False"
+                                },
+                                "requires": [
+                                    "mathlib/1.0.Z"
+                                ]
+                            }
+                        },
+                        {
+                            "package_id": "f7eb850096d2a417fcff2c51ba6e5a518ed63051",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "game_linux",
+                                "mapviewer_linux"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=graphics/1.0 --build=graphics/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux",
+                                    "arch": "x86_64",
+                                    "compiler": "gcc",
+                                    "compiler.cppstd": "gnu17",
+                                    "compiler.libcxx": "libstdc++11",
+                                    "compiler.version": "13",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "fPIC": "True",
+                                    "shared": "False"
+                                },
+                                "requires": [
+                                    "mathlib/1.0.Z"
+                                ]
                             }
                         }
                     ]
@@ -104,52 +220,217 @@
         ],
         [
             {
-                "ref": "pkg4/0.1#db6569e42e3e9916209e2ef64d6a7b52",
-                "depends": [],
+                "ref": "engine/1.0#fba6659c9dd04a4bbdc7a375f22143cb",
+                "depends": [
+                    "ai/1.0#c48360f25f5d0edde10239b8818f5f06",
+                    "graphics/1.0#24b395ba17da96288766cc83accc98f5"
+                ],
                 "packages": [
                     [
                         {
-                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "package_id": "e763be0220cfc254e08b6ed0b1a0bb2cb31cbe30",
                             "prev": null,
                             "context": "host",
                             "binary": "Build",
                             "options": [],
                             "filenames": [
-                                "bo_win"
+                                "game_windows"
                             ],
                             "depends": [],
                             "overrides": {},
-                            "build_args": "--requires=pkg4/0.1 --build=pkg4/0.1",
+                            "build_args": "--requires=engine/1.0 --build=engine/1.0",
                             "info": {
                                 "settings": {
-                                    "os": "Windows"
-                                }
+                                    "os": "Windows",
+                                    "arch": "x86_64",
+                                    "compiler": "msvc",
+                                    "compiler.cppstd": "14",
+                                    "compiler.runtime": "dynamic",
+                                    "compiler.runtime_type": "Release",
+                                    "compiler.version": "194",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "shared": "False"
+                                },
+                                "requires": [
+                                    "ai/1.0.Z",
+                                    "graphics/1.0.Z",
+                                    "mathlib/1.0.Z"
+                                ]
+                            }
+                        },
+                        {
+                            "package_id": "f83f35f0891b9bea3a0bba772243ff4413591e92",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "game_linux"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=engine/1.0 --build=engine/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux",
+                                    "arch": "x86_64",
+                                    "compiler": "gcc",
+                                    "compiler.cppstd": "gnu17",
+                                    "compiler.libcxx": "libstdc++11",
+                                    "compiler.version": "13",
+                                    "build_type": "Release"
+                                },
+                                "options": {
+                                    "fPIC": "True",
+                                    "shared": "False"
+                                },
+                                "requires": [
+                                    "ai/1.0.Z",
+                                    "graphics/1.0.Z",
+                                    "mathlib/1.0.Z"
+                                ]
                             }
                         }
                     ]
                 ]
             },
             {
-                "ref": "pkg5/0.1#db6569e42e3e9916209e2ef64d6a7b52",
-                "depends": [],
+                "ref": "mapviewer/1.0#c4660fde083a1d581ac554e8a026d4ea",
+                "depends": [
+                    "graphics/1.0#24b395ba17da96288766cc83accc98f5"
+                ],
                 "packages": [
                     [
                         {
-                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "package_id": "1e1c76270fda6b0106a941c6f839e6b27ca0360c",
                             "prev": null,
                             "context": "host",
                             "binary": "Build",
                             "options": [],
                             "filenames": [
-                                "bo_nix"
+                                "mapviewer_windows"
                             ],
                             "depends": [],
                             "overrides": {},
-                            "build_args": "--requires=pkg5/0.1 --build=pkg5/0.1",
+                            "build_args": "--requires=mapviewer/1.0 --build=mapviewer/1.0",
                             "info": {
                                 "settings": {
-                                    "os": "Windows"
-                                }
+                                    "os": "Windows",
+                                    "arch": "x86_64",
+                                    "compiler": "msvc",
+                                    "compiler.cppstd": "14",
+                                    "compiler.runtime": "dynamic",
+                                    "compiler.runtime_type": "Release",
+                                    "compiler.version": "194",
+                                    "build_type": "Release"
+                                },
+                                "requires": [
+                                    "graphics/1.0#24b395ba17da96288766cc83accc98f5:8b108997a4947ec6a0487a0b6bcbc0d1072e95f3",
+                                    "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea:4d8ab52ebb49f51e63d5193ed580b5a7672e23d5"
+                                ]
+                            }
+                        },
+                        {
+                            "package_id": "54e396abf6c2be3efe59f26c64f3301874fb0cd7",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "mapviewer_linux"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=mapviewer/1.0 --build=mapviewer/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux",
+                                    "arch": "x86_64",
+                                    "compiler": "gcc",
+                                    "compiler.cppstd": "gnu17",
+                                    "compiler.libcxx": "libstdc++11",
+                                    "compiler.version": "13",
+                                    "build_type": "Release"
+                                },
+                                "requires": [
+                                    "graphics/1.0#24b395ba17da96288766cc83accc98f5:f7eb850096d2a417fcff2c51ba6e5a518ed63051",
+                                    "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea:838c313f1b7acdfd23b222f0156e7c264dcc2515"
+                                ]
+                            }
+                        }
+                    ]
+                ]
+            }
+        ],
+        [
+            {
+                "ref": "game/1.0#1715574045610faa2705017c71d0000e",
+                "depends": [
+                    "engine/1.0#fba6659c9dd04a4bbdc7a375f22143cb"
+                ],
+                "packages": [
+                    [
+                        {
+                            "package_id": "c4e3b1102022264aac3e790e2136fb15672b393e",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "game_windows"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=game/1.0 --build=game/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Windows",
+                                    "arch": "x86_64",
+                                    "compiler": "msvc",
+                                    "compiler.cppstd": "14",
+                                    "compiler.runtime": "dynamic",
+                                    "compiler.runtime_type": "Release",
+                                    "compiler.version": "194",
+                                    "build_type": "Release"
+                                },
+                                "requires": [
+                                    "engine/1.0#fba6659c9dd04a4bbdc7a375f22143cb:e763be0220cfc254e08b6ed0b1a0bb2cb31cbe30",
+                                    "ai/1.0#c48360f25f5d0edde10239b8818f5f06:8b108997a4947ec6a0487a0b6bcbc0d1072e95f3",
+                                    "graphics/1.0#24b395ba17da96288766cc83accc98f5:8b108997a4947ec6a0487a0b6bcbc0d1072e95f3",
+                                    "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea:4d8ab52ebb49f51e63d5193ed580b5a7672e23d5"
+                                ]
+                            }
+                        },
+                        {
+                            "package_id": "8d535600eb7a65d52b0b572fbfb18d629b0eb0b1",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "game_linux"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=game/1.0 --build=game/1.0",
+                            "info": {
+                                "settings": {
+                                    "os": "Linux",
+                                    "arch": "x86_64",
+                                    "compiler": "gcc",
+                                    "compiler.cppstd": "gnu17",
+                                    "compiler.libcxx": "libstdc++11",
+                                    "compiler.version": "13",
+                                    "build_type": "Release"
+                                },
+                                "requires": [
+                                    "engine/1.0#fba6659c9dd04a4bbdc7a375f22143cb:f83f35f0891b9bea3a0bba772243ff4413591e92",
+                                    "ai/1.0#c48360f25f5d0edde10239b8818f5f06:f7eb850096d2a417fcff2c51ba6e5a518ed63051",
+                                    "graphics/1.0#24b395ba17da96288766cc83accc98f5:f7eb850096d2a417fcff2c51ba6e5a518ed63051",
+                                    "mathlib/1.0#f2b05681ed843bf50d8b7b7bdb5163ea:838c313f1b7acdfd23b222f0156e7c264dcc2515"
+                                ]
                             }
                         }
                     ]
@@ -158,10 +439,16 @@
         ]
     ],
     "profiles": {
-        "bo_win": {
+        "game_windows": {
             "args": "-pr:h=\"windows\""
         },
-        "bo_nix": {
+        "game_linux": {
+            "args": "-pr:h=\"linux\""
+        },
+        "mapviewer_windows": {
+            "args": "-pr:h=\"windows\""
+        },
+        "mapviewer_linux": {
             "args": "-pr:h=\"linux\""
         }
     }
