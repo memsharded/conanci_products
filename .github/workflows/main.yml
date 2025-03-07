@@ -32,6 +32,8 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
+      - name: Printing
+        run: echo ${{ toJSON(package) }}
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(toJSON(matrix.package[1]), 'windows')
         run: echo "PRINTING WIN ${{matrix.package[0]}}"
