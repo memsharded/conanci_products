@@ -32,6 +32,10 @@ jobs:
           python3 -m pip install conan
           conan config install https://github.com/memsharded/conanci_conf.git
           conan profile detect
+          conan remote enable products
+          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+          conan remote enable develop
+          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Create lockfile
