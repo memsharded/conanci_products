@@ -53,6 +53,8 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
+      - name: Print
+        run: echo ${{ matrix.package }}
       - name: Configure
         run: |
           python3 -m pip install conan
@@ -89,6 +91,8 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
+      - name: Print
+        run: echo ${{ matrix.package }}
       - name: Configure
         run: |
           python3 -m pip install conan
@@ -125,6 +129,8 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
+      - name: Print
+        run: echo ${{ matrix.package }}
       - name: Configure
         run: |
           python3 -m pip install conan
@@ -161,6 +167,8 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
+      - name: Print
+        run: echo ${{ matrix.package }}
       - name: Configure
         run: |
           python3 -m pip install conan
