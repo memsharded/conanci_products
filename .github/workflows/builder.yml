@@ -18,10 +18,10 @@ on:
 
 jobs:
   level:
-    runs-on: ${{ fromJSON(matrix).config }}
+    runs-on: ${{ fromJSON(inputs.matrix).config }}
     steps:
       - name: Print
-        run: echo "${{ toJSON(fromJSON(matrix).package) }}"
+        run: echo "${{ toJSON(fromJSON(inputs.matrix).package) }}"
       - name: Configure
         run: |
           python3 -m pip install conan
