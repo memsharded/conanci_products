@@ -101,6 +101,60 @@
                     ]
                 ]
             }
+        ],
+        [
+            {
+                "ref": "pkg4/0.1#db6569e42e3e9916209e2ef64d6a7b52",
+                "depends": [],
+                "packages": [
+                    [
+                        {
+                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "bo_win"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=pkg4/0.1 --build=pkg4/0.1",
+                            "info": {
+                                "settings": {
+                                    "os": "Windows"
+                                }
+                            }
+                        }
+                    ]
+                ]
+            },
+            {
+                "ref": "pkg5/0.1#db6569e42e3e9916209e2ef64d6a7b52",
+                "depends": [],
+                "packages": [
+                    [
+                        {
+                            "package_id": "ebec3dc6d7f6b907b3ada0c3d3cdc83613a2b715",
+                            "prev": null,
+                            "context": "host",
+                            "binary": "Build",
+                            "options": [],
+                            "filenames": [
+                                "bo_nix"
+                            ],
+                            "depends": [],
+                            "overrides": {},
+                            "build_args": "--requires=pkg5/0.1 --build=pkg5/0.1",
+                            "info": {
+                                "settings": {
+                                    "os": "Windows"
+                                }
+                            }
+                        }
+                    ]
+                ]
+            }
         ]
     ],
     "profiles": {
