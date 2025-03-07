@@ -33,10 +33,10 @@ jobs:
     steps:
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(fromJson(matrix.package[1]), 'windows')
-        run: echo "PRINTING WIN ${{matrix.package[0]}}"
+        run: echo "PRINTING WIN ${{matrix.package[0][0]}}"
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(fromJson(matrix.package[1]), 'linux')
-        run: echo "PRINTING LINUX ${{matrix.package[0]}}"
+        run: echo "PRINTING LINUX ${{matrix.package[0][0]}}"
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
