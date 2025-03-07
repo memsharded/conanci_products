@@ -51,36 +51,37 @@ jobs:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[0] }}
         config: [windows-2022, ubuntu-24.04]
-    runs-on: ${{ matrix.config }}
-    steps:
-      - name: Print
-        run: echo "${{ toJSON(matrix.package) }}"
-      - name: Configure
-        run: |
-          python3 -m pip install conan
-          conan config install https://github.com/memsharded/conanci_conf.git
-          conan profile detect
-          conan remote enable products
-          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
-          conan remote enable develop
-          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
-      - name: Building Windows
-        if: runner.os == 'Windows' && matrix.package.packages[0][0].binary == 'Build' && contains(toJSON(matrix.package.packages[0][0].filenames), 'windows') 
-        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows --format=json > graph.json
-      - name: Building Windows
-        if: runner.os == 'Windows' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'windows')
-        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows --format=json > graph.json
-      - name: Building linux
-        if: runner.os == 'Linux' && matrix.package.packages[0][0].binary == 'Build' && contains(toJSON(matrix.package.packages[0][0].filenames), 'linux')
-        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux --format=json > graph.json
-      - name: Building linux
-        if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
-        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
-      - name: Upload
-        if: ${{ hashFiles('graph.json') != '' }}
-        run: |
-          conan list --graph=graph.json --format=json > built.json
-          conan upload -l="built.json" -r=products --confirm
+    uses: ./.github/workflows/builder.yml
+    # runs-on: ${{ matrix.config }}
+    # steps:
+    #   - name: Print
+    #     run: echo "${{ toJSON(matrix.package) }}"
+    #   - name: Configure
+    #     run: |
+    #       python3 -m pip install conan
+    #       conan config install https://github.com/memsharded/conanci_conf.git
+    #       conan profile detect
+    #       conan remote enable products
+    #       conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+    #       conan remote enable develop
+    #       conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+    #   - name: Building Windows
+    #     if: runner.os == 'Windows' && matrix.package.packages[0][0].binary == 'Build' && contains(toJSON(matrix.package.packages[0][0].filenames), 'windows') 
+    #     run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows --format=json > graph.json
+    #   - name: Building Windows
+    #     if: runner.os == 'Windows' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'windows')
+    #     run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows --format=json > graph.json
+    #   - name: Building linux
+    #     if: runner.os == 'Linux' && matrix.package.packages[0][0].binary == 'Build' && contains(toJSON(matrix.package.packages[0][0].filenames), 'linux')
+    #     run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux --format=json > graph.json
+    #   - name: Building linux
+    #     if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
+    #     run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
+    #   - name: Upload
+    #     if: ${{ hashFiles('graph.json') != '' }}
+    #     run: |
+    #       conan list --graph=graph.json --graph-binaries=build --format=json > built.json
+    #       conan upload -l="built.json" -r=products --confirm
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[1]
@@ -117,7 +118,7 @@ jobs:
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
-          conan list --graph=graph.json --format=json > built.json
+          conan list --graph=graph.json --graph-binaries=build --format=json > built.json
           conan upload -l="built.json" -r=products --confirm
 
   level2:
@@ -155,7 +156,7 @@ jobs:
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
-          conan list --graph=graph.json --format=json > built.json
+          conan list --graph=graph.json --graph-binaries=build --format=json > built.json
           conan upload -l="built.json" -r=products --confirm
   
   level3:
@@ -193,5 +194,5 @@ jobs:
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
-          conan list --graph=graph.json --format=json > built.json
+          conan list --graph=graph.json --graph-binaries=build --format=json > built.json
           conan upload -l="built.json" -r=products --confirm
