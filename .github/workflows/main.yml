@@ -48,8 +48,8 @@ jobs:
         run: | 
           conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > game_windows.json
           conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > game_linux.json
-          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build=missing -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
-          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build=missing -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
+          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
+          conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
           conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
       - name: get properties
         id: json_properties
