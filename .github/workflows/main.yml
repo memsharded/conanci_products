@@ -16,8 +16,7 @@ jobs:
       - id: create
         name: Create build-order
         run: echo "build_order=$(jq -c . < ./build_order.json)" >> "$GITHUB_OUTPUT"
-        # run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT" 
-
+      
   #   steps:
   #     - name: Configure
   #       run: |
@@ -42,14 +41,9 @@ jobs:
   #         conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
   #         conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
   #         conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
-  #     - name: get properties
-  #       id: json_properties
-  #       uses: ActionsTools/read-json-action@main
-  #       with:
-  #         file_path: "build_order.json" 
   #     - id: create
   #       name: Create build-order
-  #       run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT"
+  #       run: echo "build_order=$(jq -c . < ./build_order.json)" >> "$GITHUB_OUTPUT"
   
   basic_print:
     needs: [compute_build_order]
@@ -68,25 +62,35 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
+      - name: Configure
+        run: |
+          apt-get update && apt-get install -y python3 python3-pip
+          python3 -m pip install conan
+          conan config install https://github.com/memsharded/conanci_conf.git
+          conan profile detect
+          conan remote enable products
+          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+          conan remote enable develop
+          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][0].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows"
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=windows
       - name: Printing Windows
         if: matrix.config == 'windows-2022' && contains(matrix.package.packages[0][1].filenames, 'game_windows')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows"
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=windows
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][0].filenames, 'game_linux')
-        run: echo "conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux"
+        run: conan install ${{matrix.package.packages[0][0].build_args}} -pr=linux
       - name: Printing linux
         if: matrix.config == 'ubuntu-24.04' && contains(matrix.package.packages[0][1].filenames, 'game_linux')
-        run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
+        run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux
 
   level1:
-    if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
+    if: fromJSON(needs.compute_build_order.outputs.build_order).order[1]
     needs: [level0, compute_build_order]
     strategy:
       matrix:
-        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[1] }}
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[1] }}
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
@@ -104,11 +108,11 @@ jobs:
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level2:
-    if: fromJSON(needs.compute_build_order.outputs.build_order)[2]
+    if: fromJSON(needs.compute_build_order.outputs.build_order).order[2]
     needs: [level1, compute_build_order]
     strategy:
       matrix:
-        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[2] }}
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[2] }}
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
@@ -126,11 +130,11 @@ jobs:
         run: echo "conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux"
 
   level3:
-    if: fromJSON(needs.compute_build_order.outputs.build_order)[3]
+    if: fromJSON(needs.compute_build_order.outputs.build_order).order[3]
     needs: [level2, compute_build_order]
     strategy:
       matrix:
-        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[3] }}
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[3] }}
         config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
