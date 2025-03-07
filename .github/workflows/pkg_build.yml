@@ -1,0 +1,28 @@
+name: Package build
+
+on:
+  workflow_call:
+
+jobs:
+  linux_build:
+    runs-on: ubuntu-24.04
+    name: Build Linux package
+    steps:
+      - name: Download conan.lock
+        uses: actions/download-artifact@v4
+        with:
+          name: conan.lock
+      - name: build package
+        run: |
+          conan create . --build="missing:mathlib/*" -pr=linux --lockfile=conan.lock --format=json > graph.json
+      - name: upload package
+        run: | 
+          conan remote enable packages
+          conan remote login packages "${{ secrets.USERPACKAGES }}" -p "${{ secrets.TOKENPACKAGES }}"
+          conan list --graph=graph.json --graph-binaries=build --format=json > built.json
+          conan upload -l=built.json -r=packages -c --format=json > uploaded_linux.json
+      - name: 'Upload pkglist'
+        uses: actions/upload-artifact@v4
+        with:
+          name: uploaded_linux.json
+          path: uploaded_linux.json

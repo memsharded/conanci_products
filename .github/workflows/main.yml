@@ -1,0 +1,47 @@
+name: Main Workflow
+on:
+  push:
+    branches:
+      - *
+
+jobs:
+  compute_build_order:
+    name: Compute build order
+    runs-on: ubuntu-24.04
+    outputs:
+      build_order: ${{ steps.create.outputs.build_order }}
+    steps:
+      - id: create
+        name: Create build-order
+        run: echo "build_order= {[[1, 2, 3],[4, 5],[6, 7, 8]]}" >> "$GITHUB_OUTPUT" 
+
+  level0:
+    needs: [compute_build_order]
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order[0]) }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Printing
+        run: echo "PRINTING ${{matrix.package}}"
+
+  level1:
+    needs: [level0, compute_build_order]
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order[1]) }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Printing
+        run: echo "PRINTING ${{matrix.package}}"
+
+  level2:
+    needs: [level1, compute_build_order]
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order[2]) }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Printing
+        run: echo "PRINTING ${{matrix.package}}"
+ 
