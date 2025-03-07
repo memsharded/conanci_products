@@ -9,7 +9,7 @@ jobs:
     name: Compute build order
     runs-on: ubuntu-24.04
     outputs:
-      build_order: ${{ steps.create.outputs.build_order }}
+      build_order: ${{ steps.create.outputs.build_order.order }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
