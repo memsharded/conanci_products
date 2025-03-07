@@ -50,8 +50,8 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[0] }}
-        config: [windows-2022, ubuntu-24.04]
-    runs-on: ${{ matrix.config }}
+        config: [{runner: windows-2022, shell: cmd}], {runer: ubuntu-24.04, shell: bash}]
+    runs-on: ${{ matrix.config.runner }}
     steps:
       - name: Print
         run: echo "${{ toJSON(matrix.package) }}"
@@ -77,7 +77,7 @@ jobs:
         if: runner.os == 'Linux' && matrix.package.packages[0][1].binary == 'Build' && contains(toJSON(matrix.package.packages[0][1].filenames), 'linux')
         run: conan install ${{matrix.package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
       - name: Upload
-        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash'}}
+        shell: ${{ matrix.config.shell }}
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
