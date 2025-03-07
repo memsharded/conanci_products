@@ -51,14 +51,14 @@ jobs:
           conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=windows --order-by=recipe --format=json > mapviewer_windows.json
           conan graph build-order --requires=mapviewer/1.0 --lockfile=conan.lock --build="*" -pr=linux --order-by=recipe --format=json > mapviewer_linux.json
           conan graph build-order-merge --file=game_windows.json --file=game_linux.json --file=mapviewer_windows.json --file=mapviewer_linux.json --reduce --format=json > build_order.json
-        - name: get properties
-          id: json_properties
-          uses: ActionsTools/read-json-action@main
-          with:
-            file_path: "build_order.json" 
-        - id: create
-          name: Create build-order
-          run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT"
+      - name: get properties
+        id: json_properties
+        uses: ActionsTools/read-json-action@main
+        with:
+          file_path: "build_order.json" 
+      - id: create
+        name: Create build-order
+        run: echo "build_order=${{toJSON(steps.json_properties.outputs.order)}}" >> "$GITHUB_OUTPUT"
   
   basic_print:
     needs: [compute_build_order]
