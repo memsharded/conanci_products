@@ -13,7 +13,7 @@ jobs:
     steps:
       - id: create
         name: Create build-order
-        run: echo "build_order=[[(1, (windows, linux)), (2, (windows,)), (3, (linux, ))],[4, 5],[6, 7, 8]]" >> "$GITHUB_OUTPUT" 
+        run: echo "build_order=[[[1, [windows, linux]], [2, [windows]], [3, [linux]]],[4, 5],[6, 7, 8]]" >> "$GITHUB_OUTPUT" 
 
   basic_print:
     needs: [compute_build_order]
