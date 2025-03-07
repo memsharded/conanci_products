@@ -50,13 +50,8 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[0] }}
-        config:
-          - {runner: windows-2022, shell: cmd}
-          - {runner: ubuntu-24.04, shell: bash}
-    defaults:
-      run:
-        shell: ${{ matrix.config.shell }}
-    runs-on: ${{ matrix.config.runner }}
+        config: [windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.config }}
     steps:
       - name: Print
         run: echo "${{ toJSON(matrix.package) }}"
@@ -85,7 +80,7 @@ jobs:
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
-          conan upload -l=built.json -r=products --confirm
+          conan upload -l="built.json" -r=products --confirm
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[1]
@@ -93,12 +88,7 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[1] }}
-        config:
-          - {runner: windows-2022, shell: cmd}
-          - {runner: ubuntu-24.04, shell: bash}
-    defaults:
-      run:
-        shell: ${{ matrix.config.shell }}
+        config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
@@ -128,7 +118,7 @@ jobs:
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
-          conan upload -l=built.json -r=products --confirm
+          conan upload -l="built.json" -r=products --confirm
 
   level2:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[2]
@@ -136,12 +126,7 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[2] }}
-        config:
-          - {runner: windows-2022, shell: cmd}
-          - {runner: ubuntu-24.04, shell: bash}
-    defaults:
-      run:
-        shell: ${{ matrix.config.shell }}
+        config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
@@ -171,20 +156,15 @@ jobs:
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
-          conan upload -l=built.json -r=products --confirm
-
+          conan upload -l="built.json" -r=products --confirm
+  
   level3:
     if: fromJSON(needs.compute_build_order.outputs.build_order).order[3]
     needs: [level2, compute_build_order]
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[3] }}
-        config:
-          - {runner: windows-2022, shell: cmd}
-          - {runner: ubuntu-24.04, shell: bash}
-    defaults:
-      run:
-        shell: ${{ matrix.config.shell }}
+        config: [windows-2022, ubuntu-24.04]
     runs-on: ${{ matrix.config }}
     steps:
       - name: Print
@@ -214,5 +194,4 @@ jobs:
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --format=json > built.json
-          conan upload -l=built.json -r=products --confirm
-  
+          conan upload -l="built.json" -r=products --confirm
