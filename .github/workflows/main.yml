@@ -54,6 +54,11 @@ jobs:
     uses: ./.github/workflows/builder.yml
     with:
       matrix: ${{ toJSON(matrix) }}
+    secrets:
+      USERDEVELOP: ${{ secrets.USERDEVELOP }}
+      TOKENDEVELOP: ${{ secrets.TOKENDEVELOP }}
+      USERPRODUCTS: ${{ secrets.USERPRODUCTS}}
+      TOKENPRODUCTS: ${{ secrets.TOKENPRODUCTS }}
     # runs-on: ${{ matrix.config }}
     # steps:
     #   - name: Print
