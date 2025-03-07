@@ -55,7 +55,7 @@ jobs:
           - {runer: ubuntu-24.04, shell: bash}
     defaults:
       run:
-        shell: ${{ matrix.sys.shell }}
+        shell: ${{ matrix.config.shell }}
     runs-on: ${{ matrix.config.runner }}
     steps:
       - name: Print
