@@ -23,6 +23,7 @@ jobs:
         run: echo "PRINTING ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0]}}"
 
   level0:
+    if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
     needs: [compute_build_order]
     strategy:
       matrix:
@@ -33,6 +34,7 @@ jobs:
         run: echo "PRINTING ${{matrix.package}}"
 
   level1:
+    if: fromJSON(needs.compute_build_order.outputs.build_order)[1]
     needs: [level0, compute_build_order]
     strategy:
       matrix:
@@ -43,10 +45,22 @@ jobs:
         run: echo "PRINTING ${{matrix.package}}"
 
   level2:
+    if: fromJSON(needs.compute_build_order.outputs.build_order)[2]
     needs: [level1, compute_build_order]
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[2] }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Printing
+        run: echo "PRINTING ${{matrix.package}}"
+
+  level3:
+    if: fromJSON(needs.compute_build_order.outputs.build_order)[3]
+    needs: [level2, compute_build_order]
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[3] }}
     runs-on: ubuntu-24.04
     steps:
       - name: Printing
