@@ -50,7 +50,9 @@ jobs:
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order).order[0] }}
-        config: [{runner: windows-2022, shell: cmd}], {runer: ubuntu-24.04, shell: bash}]
+        config:
+          - {runner: windows-2022, shell: cmd}
+          - {runer: ubuntu-24.04, shell: bash}
     runs-on: ${{ matrix.config.runner }}
     steps:
       - name: Print
