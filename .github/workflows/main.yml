@@ -13,7 +13,7 @@ jobs:
     steps:
       - id: create
         name: Create build-order
-        run: echo "build_order=[[1, 2, 3],[4, 5],[6, 7, 8]]" >> "$GITHUB_OUTPUT" 
+        run: echo "build_order=[[(1, (windows, linux)), (2, (windows,)), (3, (linux, ))],[4, 5],[6, 7, 8]]" >> "$GITHUB_OUTPUT" 
 
   basic_print:
     needs: [compute_build_order]
@@ -22,24 +22,20 @@ jobs:
       - name: Printing
         run: echo "PRINTING ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0]}}"
 
-  nested_wf:
-    needs: [compute_build_order]
-    strategy:
-      matrix:
-        package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0] }}
-    uses: ./.github/workflows/execute.yml
-
-
   level0:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[0]
     needs: [compute_build_order]
     strategy:
       matrix:
         package: ${{ fromJSON(needs.compute_build_order.outputs.build_order)[0] }}
-    runs-on: ubuntu-24.04
+        config: [windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.config }}
     steps:
       - name: Printing
-        run: echo "PRINTING ${{matrix.package}}"
+        if: matrix.config == "windows-2022" && contains(fromJson(matrix.package[1]), "windows")
+        run: echo "PRINTING WIN ${{matrix.package[0]}}"
+        if: matrix.config == "ubuntu-24.04" && contains(fromJson(matrix.package[1]), "linux")
+        run: echo "PRINTING LINUX ${{matrix.package[0]}}"
 
   level1:
     if: fromJSON(needs.compute_build_order.outputs.build_order)[1]

@@ -7,8 +7,6 @@ jobs:
   execute:
     runs-on: ubuntu-24.04
     name: Executing configs
-    matrix:
-      config: [windows, Linux]
     steps:
       - name: Printing
         run: echo "PRINTING ${{ matrix.config }}"
