@@ -29,10 +29,10 @@ jobs:
           echo "PACKAGE ${{matrix.package[0]}}"
           echo "CONFIGS ${{toJSON(matrix.package[1])}}"
       - name: Printing Windows
-        if: matrix.config == 'windows-2022' && contains(fromJSON(matrix.package[1]), 'windows')
+        if: matrix.config == 'windows-2022' && contains(toJSON(matrix.package[1]), 'windows')
         run: echo "PRINTING WIN "
       - name: Printing linux
-        if: matrix.config == 'ubuntu-24.04' && contains(fromJSON(matrix.package[1]), 'linux')
+        if: matrix.config == 'ubuntu-24.04' && contains(toJSON(matrix.package[1]), 'linux')
         run: echo "PRINTING LINUX "
 
   level1:
