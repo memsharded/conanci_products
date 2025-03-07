@@ -53,7 +53,7 @@ jobs:
         config: [windows-2022, ubuntu-24.04]
     uses: ./.github/workflows/builder.yml
     with:
-      matrix: ${{ matrix }}
+      matrix: ${{ toJSON(matrix) }}
     # runs-on: ${{ matrix.config }}
     # steps:
     #   - name: Print

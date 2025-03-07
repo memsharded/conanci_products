@@ -14,13 +14,14 @@ on:
     inputs:
       matrix:
         required: true
+        type: string
 
 jobs:
   level:
-    runs-on: ${{ matrix.config }}
+    runs-on: ${{ fromJSON(matrix).config }}
     steps:
       - name: Print
-        run: echo "${{ toJSON(matrix.package) }}"
+        run: echo "${{ toJSON(fromJSON(matrix).package) }}"
       - name: Configure
         run: |
           python3 -m pip install conan
