@@ -41,12 +41,12 @@ jobs:
       - name: Create lockfile
         run: |
           conan lock create --requires=game/1.0 -pr=windows --lockfile-out=conan.lock
-          conan lock create --requires=game/1.0 -pr=linux --lockfile=conan.lock --lockfile-out=conan.lock
+
       - name: Compute build order
         run: | 
           conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="game*" -pr=windows --order-by=recipe --format=json > game_windows.json
-          conan graph build-order --requires=game/1.0 --lockfile=conan.lock --build="game*" -pr=linux --order-by=recipe --format=json > game_linux.json
-          conan graph build-order-merge --file=game_windows.json --file=game_linux.json --reduce --format=json > build_order.json
+
+          conan graph build-order-merge --file=game_windows.json --reduce --format=json > build_order.json
       - name: get properties
         id: json_properties
         uses: ActionsTools/read-json-action@main
