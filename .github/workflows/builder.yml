@@ -33,16 +33,16 @@ jobs:
           conan remote enable develop
           conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
       - name: Building Windows
-        if: runner.os == 'Windows' && fromJSON(inputs.matrix).package.packages[0][0].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'windows') 
+        if: runner.os == 'Windows' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'windows') 
         run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} -pr=windows --format=json > graph.json
       - name: Building Windows
-        if: runner.os == 'Windows' && fromJSON(inputs.matrix).package.packages[0][1].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'windows')
+        if: runner.os == 'Windows' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'windows')
         run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} -pr=windows --format=json > graph.json
       - name: Building linux
-        if: runner.os == 'Linux' && fromJSON(inputs.matrix).package.packages[0][0].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'linux')
+        if: runner.os == 'Linux' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'linux')
         run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} -pr=linux --format=json > graph.json
       - name: Building linux
-        if: runner.os == 'Linux' && fromJSON(inputs.matrix).package.packages[0][1].binary == 'Build' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'linux')
+        if: runner.os == 'Linux' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'linux')
         run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}

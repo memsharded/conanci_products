@@ -107,3 +107,24 @@ jobs:
       TOKENDEVELOP: ${{ secrets.TOKENDEVELOP }}
       USERPRODUCTS: ${{ secrets.USERPRODUCTS}}
       TOKENPRODUCTS: ${{ secrets.TOKENPRODUCTS }}
+
+
+  promotion:
+    runs-on: ubuntu-24.04
+    needs: [level3]
+    steps:
+      - name: Configure environment and install Conan release
+        run: |
+          apt-get update && apt-get install -y python3 python3-pip
+          python3 -m pip install conan
+          conan config install https://github.com/memsharded/conanci_conf.git
+      - name: Configure repos
+        run: |
+          conan remote enable develop
+          conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+          conan remote enable products
+          conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+      - name: promote packages
+        run: |
+          conan download "*" -r=products --format=json > promote.json
+          conan upload --list=promote.json -r=develop -c
