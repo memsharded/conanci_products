@@ -38,20 +38,30 @@ jobs:
           conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
           conan remote enable develop
           conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
+      - name: Download conan.lock
+        uses: actions/download-artifact@v4
+        with:
+          name: conan.lock
       - name: Building Windows
         if: runner.os == 'Windows' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'windows') 
-        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} -pr=windows --format=json > graph.json
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} --lockfile=conan.lock -pr=windows --format=json > graph.json
       - name: Building Windows
         if: runner.os == 'Windows' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'windows')
-        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} -pr=windows --format=json > graph.json
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} --lockfile=conan.lock -pr=windows --format=json > graph.json
       - name: Building linux
         if: runner.os == 'Linux' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][0].filenames), 'linux')
-        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} -pr=linux --format=json > graph.json
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][0].build_args}} --lockfile=conan.lock -pr=linux --format=json > graph.json
       - name: Building linux
         if: runner.os == 'Linux' && contains(toJSON(fromJSON(inputs.matrix).package.packages[0][1].filenames), 'linux')
-        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} -pr=linux --format=json > graph.json
+        run: conan install ${{fromJSON(inputs.matrix).package.packages[0][1].build_args}} --lockfile=conan.lock -pr=linux --format=json > graph.json
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --graph-binaries=build --format=json > built.json
-          conan upload -l="built.json" -r=products --confirm
+          conan upload -l="built.json" -r=products --confirm --format=json > uploaded_${{ github.run_id }}_${{ github.run_number }}.json
+      - name: 'Upload pkglist'
+        if: ${{ hashFiles('graph.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: uploaded_${{ github.run_id }}_${{ github.run_number }}.json
+          path: uploaded_${{ github.run_id }}_${{ github.run_number }}.json
