@@ -58,10 +58,10 @@ jobs:
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
           conan list --graph=graph.json --graph-binaries=build --format=json > built.json
-          conan upload -l="built.json" -r=products --confirm --format=json > uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ fromJSON(inputs.matrix).package.ref }}_${{ fromJSON(inputs.matrix).config }}.json
+          conan upload -l="built.json" -r=products --confirm --format=json > uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ hashFiles('built.json') }}_${{ fromJSON(inputs.matrix).config }}.json
       - name: 'Upload pkglist'
         if: ${{ hashFiles('graph.json') != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ fromJSON(inputs.matrix).package.ref }}_${{ fromJSON(inputs.matrix).config }}.json
-          path: uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ fromJSON(inputs.matrix).package.ref }}_${{ fromJSON(inputs.matrix).config }}.json
+          name: uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ hashFiles('built.json') }}_${{ fromJSON(inputs.matrix).config }}.json
+          path: uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ hashFiles('built.json') }}_${{ fromJSON(inputs.matrix).config }}.json
