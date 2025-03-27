@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Print
         run: echo "${{ toJSON(fromJSON(inputs.matrix).package) }}"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
       - name: Configure
         run: |
           python3 -m pip install conan
