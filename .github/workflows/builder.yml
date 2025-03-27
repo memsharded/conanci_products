@@ -23,13 +23,14 @@ jobs:
     steps:
       - name: Print
         run: echo "${{ toJSON(fromJSON(inputs.matrix).package) }}"
+      - name: Checkout code
+        uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
       - name: Configure
         run: |
-          python3 -m pip install conan
           conan config install https://github.com/memsharded/conanci_conf.git
           conan profile detect
           conan remote enable products
