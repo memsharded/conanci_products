@@ -138,5 +138,11 @@ jobs:
           merge-multiple: true
       - name: promote packages
         run: |
-          conan download "*" -r=products --format=json > promote.json
+          files=$(ls uploaded_*.json)
+          args=""
+          for f in $files; do
+            args="$args -l $f"
+          done
+          conan pkglist merge $args --format=json > uploaded.json
+          conan download --list=uploaded.json -r=products --format=json > promote.json
           conan upload --list=promote.json -r=develop -c
