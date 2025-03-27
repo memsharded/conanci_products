@@ -112,6 +112,7 @@ jobs:
   promotion:
     runs-on: ubuntu-24.04
     needs: [level3]
+    if: ${{ always() && ! failure() && ! cancelled() }}
     steps:
       - name: Configure environment and install Conan release
         run: |
