@@ -63,5 +63,5 @@ jobs:
         if: ${{ hashFiles('graph.json') != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: uploaded_${{ github.run_id }}_${{ github.run_number }}.json
-          path: uploaded_${{ github.run_id }}_${{ github.run_number }}.json
+          name: uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ fromJSON(inputs.matrix).config }}.json
+          path: uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ fromJSON(inputs.matrix).config }}.json
