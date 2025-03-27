@@ -130,6 +130,12 @@ jobs:
           conan remote login develop "${{ secrets.USERDEVELOP }}" -p "${{ secrets.TOKENDEVELOP }}"
           conan remote enable products
           conan remote login products "${{ secrets.USERPRODUCTS }}" -p "${{ secrets.TOKENPRODUCTS }}"
+      - name: Download pkglists
+        uses: actions/download-artifact@v4
+        with:
+          path: .
+          pattern: uploaded_*.json
+          merge-multiple: true
       - name: promote packages
         run: |
           conan download "*" -r=products --format=json > promote.json
