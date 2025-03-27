@@ -31,6 +31,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Configure
         run: |
+          python3 -m pip install conan
           conan config install https://github.com/memsharded/conanci_conf.git
           conan profile detect
           conan remote enable products
