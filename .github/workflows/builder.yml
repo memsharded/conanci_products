@@ -57,7 +57,7 @@ jobs:
       - name: Upload
         if: ${{ hashFiles('graph.json') != '' }}
         run: |
-          conan list --graph=graph.json --graph-binaries=build --format=json > built.json
+          conan list --graph=graph.json --format=json > built.json
           conan upload -l="built.json" -r=products --confirm --format=json > uploaded_${{ github.run_id }}_${{ github.run_number }}_${{ hashFiles('graph.json') }}_${{ fromJSON(inputs.matrix).config }}.json
       - name: 'Upload pkglist'
         if: ${{ hashFiles('graph.json') != '' }}
